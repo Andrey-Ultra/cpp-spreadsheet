@@ -14,6 +14,7 @@ struct Position {
     int col = 0;
 
     bool operator==(Position rhs) const;
+    bool operator!=(Position rhs) const;
     bool operator<(Position rhs) const;
 
     bool IsValid() const;
@@ -39,7 +40,7 @@ public:
     enum class Category {
         Ref,    // ссылка на ячейку с некорректной позицией
         Value,  // ячейка не может быть трактована как число
-        Div0,  // в результате вычисления возникло деление на ноль
+        Arithmetic,  // в результате вычисления возникло деление на ноль
     };
 
     FormulaError(Category category);

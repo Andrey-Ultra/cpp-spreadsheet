@@ -4,13 +4,14 @@
 #include "formula.h"
 
 #include <functional>
+#include <optional>
 #include <unordered_set>
 
 class Sheet;
 
 class Cell : public CellInterface {
 public:
-    Cell(Sheet& sheet);
+    explicit Cell(SheetInterface& sheet);
     ~Cell();
 
     void Set(std::string text);
@@ -23,14 +24,20 @@ public:
     bool IsReferenced() const;
 
 private:
-    class Impl;
-    class EmptyImpl;
-    class TextImpl;
-    class FormulaImpl;
+    enum class Type {
+        Empty,
+        Text,
+        Formula,
+    };
 
-    std::unique_ptr<Impl> impl_;
+    void InvalidateCache();
 
-    // Добавьте поля и методы для связи с таблицей, проверки циклических 
-    // зависимостей, графа зависимостей и т. д.
+    SheetInterface& sheet_;
+    std::string text_;
+    Type type_ = Type::Empty;
+    std::unique_ptr<FormulaInterface> formula_;
+    mutable std::optional<Value> cache_;
+    std::unordered_set<Cell*> dependents_;
 
+    friend class Sheet;
 };
