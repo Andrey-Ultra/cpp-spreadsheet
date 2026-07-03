@@ -9,6 +9,8 @@ Cell::Cell(SheetInterface& sheet) : sheet_(sheet) {}
 Cell::~Cell() = default;
 
 void Cell::Set(std::string text) {
+    if (text_ == text) return;
+
     cache_.reset();
     text_ = text;
     formula_.reset();

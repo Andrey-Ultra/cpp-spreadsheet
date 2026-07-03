@@ -157,6 +157,9 @@ public:
                 result = lhs * rhs;
                 break;
             case Divide:
+                if (rhs == 0) {
+                    throw FormulaError(FormulaError::Category::Arithmetic);
+                }
                 result = lhs / rhs;
                 break;
         }
